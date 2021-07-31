@@ -1,0 +1,31 @@
+.titulo {
+    background-color: rgb(13, 215, 230);
+    width:fit-content;
+    padding: 1rem;
+    border-radius: 20px;
+    border: 2px solid #ccc;
+    /* IMPORTANTE */
+    text-align: center;
+    align-content: center;
+    margin:auto; /*Centra el bloque*/
+    display:block;
+}
+.linea{
+    border-color:black;
+}
+.btn{
+    background-color: rgb(13, 215, 230);
+    border-radius: 20px;
+    width: 100px;
+    font-size: large;
+    left: auto;
+}
+.pie{
+    align-content: flex-end;
+    position: absolute;
+    bottom: 10px;
+}
+body{
+    font-family: 'Indie Flower', cursive;
+    background-color: rgb(41, 156, 108);
+}

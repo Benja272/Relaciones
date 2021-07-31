@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link type="text/css" rel="stylesheet" href="css/estilos.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Indie+Flower&display=swap" rel="stylesheet">
+</head>
+<body>
+    <h1 class="titulo">Ayuda Relacional</h1>
+    <hr>
+    <p>
+        Esta pagina tiene la intencion de proveer un espacio para aquellos que estan 
+        siendo involucrados en algun tipo problema en cualquier relacion hasta incluso con
+        si mismo, luego la intencion de la pagina es completamente experimental y tiene la
+        intencion de ayudar en lo que los usuarios identifican como un problema en su vida.
+        La parte experimental es la metodologia a seguir para poder ayudar a cada uno a encontrar
+        una respuesta a su inconveniente. Se le preguntaran una serie de interrogantes que tendran el
+        sentido de llevar la reflexion de cada uno a el motivo principal del inconveniente. 
+        Invitamos a que prueben el servicio y asi lograr un crecimiento en ustedes asi como en nosotros.
+
+    </p>
+    <hr class="linea">
+    <p>
+        Para comenzar con el proceso vamos a necesitar un nombre para identificarte
+        (puede ser de mentira) y tambien que nos indiques a cuales de las siguientes categorias pertenece 
+        su conflicto: <br>
+        Nombre: <input id="name" type="text" value="Juan Litt">
+        Tipo de conflicto:
+        <select id="selec">
+            <option value="Amoroso">Amoroso</option>
+            <option value="Familiar" selected>Familiar</option>
+            <option value="General">General</option>
+        </select>
+        <button onClick="btnClick()" class="btn">Aceptar</button>
+    </p>
+    <p class="pie">Recomendaciones de cualquier tipo depositelas aca.. <input type="text" value="Mejora la pagina muerto"></p>
+    <script src="js/action.js"></script>
+</body>
+</html>
