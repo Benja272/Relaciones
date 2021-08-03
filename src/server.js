@@ -1,11 +1,21 @@
 var express = require('express'); /* forma de importar en node */
 var morgan =  require('morgan');
 const path = require('path');
+const handlebars = require('express-handlebars');
+
 var app = express();
 
 //settings
 app.set('port', process.env.PORT || 4000);
 app.set('views' , path.join(__dirname , 'views')) // para hacerlo multiplataforma
+app.engine('.hbs',handlebars({ //configuracion de motor
+    defaultLayout: 'main',
+    layoutsDir: path.join(app.get('views'),'layouts'),
+    partialsDir: path.join(app.get('views'),'partials'),
+    extname: '.hbs'
+    })) 
+
+app.set('view engine', '.hbs');
 
 //middlewares
 app.use(express.json()); //usar middleware para que express entienda formato json
@@ -15,31 +25,12 @@ app.use(express.urlencoded({extended: false}))
 app.use(morgan('dev'));
 
 //rutes
-app.all('/user',(req,res,next) => {
-    console.log("paso");
-    next();
-});
+app.get('/', (req,res) => {
+    res.render('index');
+})
 
-app.get('/w', (req,res) => {
-    res.send("Hola perro");
-});
-
-//rutas dinamicas el valor queda guardado en id
-app.get('/aa', (req,res) => {
-    console.log(req.params);
-    res.send("Hola perro");
-});
-
-app.post('/w', (req,res) => {
-    console.log(req.body); //muestra contenido de request
-    res.send("pst");
-});
-
-app.get('/about', (req,res) => {
-    res.json({
-        name: "vayo" // objeto de js
-    });
-});
+app.use(require('./routes/indexRoutes'));
+app.use(require('./routes/asks'));
 
 //static files 
 
