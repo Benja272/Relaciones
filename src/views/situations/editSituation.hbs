@@ -1,0 +1,26 @@
+{{#each errors}}
+<div class="alert alert-danger alert-dismissible fade show" role="alert">
+  {{text}}
+  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+{{/each}}
+
+<div class="col-md-6 mx-auto">
+    <div class="card">
+        <div class="card-header">
+            <h2>Editando situacion</h2>
+        </div>
+        <div class="card-body"> 
+            <form action="/sit/updateSit/{{sit._id}}?_method=PUT" method="POST">
+                <div class="form-grup">
+                    <textarea name="situation" rows="10" class="form-control">{{sit.situation}}</textarea>
+                </div>
+                <div class="form-grup pt-5">
+                    <button class="btn btn-primary btn-block">Guardar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

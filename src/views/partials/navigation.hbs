@@ -1,0 +1,44 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/">Ayuda Relacional</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="/">Principal</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">About</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
+                    </li>
+                </ul>
+                {{#if user}}
+                <div class="dropdown ms-auto" >
+                    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                        Menu
+                    </button>
+                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                        <li><a class="dropdown-item" href="/sit">Situaciones</a></li>
+                        <li><a class="dropdown-item" href="/logout">Cerrar Sesion</a></li>
+                    </ul>
+                </div>
+                {{else}}
+                <ul class="navbar-nav ms-auto"> {{!-- ms-auto para poner a la derecha    --}}
+                    <li class="nav-item">
+                        <a href="/signIn" class="nav-link">Ingresar</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="/signUp" class="nav-link">Registrarse</a>
+                    </li>
+                </ul>
+                {{/if}}
+            </div>
+        </div>
+    </div>
+</nav>

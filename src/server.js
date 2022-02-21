@@ -23,6 +23,7 @@ app.engine('.hbs',handlebars({ //configuracion de motor
 
 app.set('view engine', '.hbs');
 
+
 //middlewares
 app.use(express.json()); //usar middleware para que express entienda formato json
 app.use(express.urlencoded({extended: false}))
@@ -42,6 +43,9 @@ app.use(methodOverride('_method'));
 //global variables
 app.use((req,res,next) => {
     res.locals.success_msg = req.flash("success_msg") //devuelve el valor actual de succes_msg
+    res.locals.error_msg = req.flash("error_msg")
+    res.locals.error = req.flash("error")
+    res.locals.user = req.user || null
     next();
 }); 
 
@@ -51,10 +55,11 @@ app.get('/', (req,res) => {
 })
 
 app.use(require('./routes/indexRoutes'));
-app.use(require('./routes/Person'));
+const {router} = require('./routes/Person')
+app.use(router);
 app.use(require('./routes/users'));
 //static files 
-
+app.use(express.static(path.join(__dirname,'views/images')));
 app.use(express.static(path.join(__dirname,'public')));     
 
 module.exports = app;

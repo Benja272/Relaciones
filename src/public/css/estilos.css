@@ -29,3 +29,11 @@ body{
     font-family: 'Indie Flower', cursive;
     background-color: rgb(41, 156, 108);
 }
+
+.img {
+    width: 10%;
+    height: 10%;
+    display: flex;
+    opacity: 0.3;
+    float: right;
+}
