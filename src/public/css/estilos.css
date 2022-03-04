@@ -37,3 +37,7 @@ body{
     opacity: 0.3;
     float: right;
 }
+
+.elimsub {
+    text-decoration: none;
+}

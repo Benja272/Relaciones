@@ -13,7 +13,13 @@
             <h2>Editando situacion</h2>
         </div>
         <div class="card-body"> 
+            
             <form action="/sit/updateSit/{{sit._id}}?_method=PUT" method="POST">
+                <h3>Titulo:</h3>
+                <div class="form-grup">
+                    <textarea name="title" rows="1" class="form-control">{{sit.title}}</textarea>
+                </div>
+                <h3>Situacion:</h3>
                 <div class="form-grup">
                     <textarea name="situation" rows="10" class="form-control">{{sit.situation}}</textarea>
                 </div>

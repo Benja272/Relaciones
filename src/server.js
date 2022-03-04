@@ -58,6 +58,7 @@ app.use(require('./routes/indexRoutes'));
 const {router} = require('./routes/Person')
 app.use(router);
 app.use(require('./routes/users'));
+app.use(require('./routes/utilRoutes'));
 //static files 
 app.use(express.static(path.join(__dirname,'views/images')));
 app.use(express.static(path.join(__dirname,'public')));     

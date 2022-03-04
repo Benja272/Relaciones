@@ -1,5 +1,8 @@
 <div class="container m-3">
     <h1>Todas tus Preguntas:</h1>
+    {{#if sitId}}
+        <a class="btn btn-primary btn-block btn-sm" href="/asks/add/{{sitId}}">Agregar otra</a> 
+    {{/if}}
     <br>    
     <script>
         function click(elem){
@@ -14,45 +17,17 @@
                 const arriba = document.getElementById("abajo" + id)
                 arriba.style.display = "block";  
                 document.getElementById(id).style.display = "none";
+                document.getElementById("form"+id).style.display = "none";
             }
             event.stopPropagation()
         }
 
         function editClick(parent){
             console.log(parent.childNodes)
-            const form = document.createElement("form");
-            const input = document.createElement("input");
-            const textarea = document.createElement("textarea");
-            const button = document.createElement("button");
-            const a = document.createElement("a");
-            //form
-            form.setAttribute("action","/asks/edit/" + parent.id + "?_method=PUT" )
-            form.setAttribute("method","POST")
-            //input
-            input.setAttribute("type","hidden")
-            input.setAttribute("name","_method")
-            input.setAttribute("value","PUT")
-            //buttons
-            button.setAttribute("type","submit")
-            button.setAttribute("class","btn btn-primary btn-block btn-sm")
-            button.innerText = "Listo" 
-            //textarea
-            textarea.setAttribute("name","answer")  
-            textarea.setAttribute("rows","5")  
-            textarea.setAttribute("class","control")  
-            //a
-            a.setAttribute("href","/asks")
-            a.setAttribute("class","btn btn-danger btn-block btn-sm m-2")
-            a.innerHTML = "Cancelar"
-            form.appendChild(input);
-            form.appendChild(textarea);
-            form.appendChild(button);
-            form.appendChild(a)
-            const p = parent.childNodes[1]
-            const icon = parent.childNodes[3]
-            parent.removeChild(p)
-            parent.removeChild(icon)
-            parent.appendChild(form)
+            const form = parent.childNodes[3]
+            form.style.display = "block";
+            const icon = parent.childNodes[5]
+            icon.style.display = "none";
         }
     </script>
     <div class="row">
@@ -60,18 +35,25 @@
             <div class="col-md-3">
                 <div class="card ">
                     <div class="card-header bg-info d-flex justify-content-between">{{ask}}
-                        <svg style="position: absolute; right: 5px; " onclick="click(this);" id="abajo{{_id}}" xmlns="http://www.w3.org/2000/svg " width="16" height="16" fill="currentColor" class="bi bi-arrow-down-circle" viewBox="0 0 16 16">
+                        <svg style="position: absolute; right: 5px;" onclick="click(this);" id="abajo{{_id}}" xmlns="http://www.w3.org/2000/svg " width="16" height="16" fill="currentColor" class="bi bi-arrow-down-circle" viewBox="0 0 16 16">
                             <path fill-rule="evenodd" d="M1 8a7 7 0 1 0 14 0A7 7 0 0 0 1 8zm15 0A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8.5 4.5a.5.5 0 0 0-1 0v5.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V4.5z"/>
                         </svg>
                         <svg style="position: absolute; right: 5px; display:none;" onclick="click(this);" id="arriba{{_id}}" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-up-circle" viewBox="0 0 16 16">
                             <path fill-rule="evenodd" d="M1 8a7 7 0 1 0 14 0A7 7 0 0 0 1 8zm15 0A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-7.5 3.5a.5.5 0 0 1-1 0V5.707L5.354 7.854a.5.5 0 1 1-.708-.708l3-3a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1-.708.708L8.5 5.707V11.5z"/>
                         </svg>
                     </div>
+                    <div id="form{{_id}}" style="display: none;">
+                        <form action="/asks/updateAsk/{{_id}}?_method=PUT" method="POST" type="hidden">
+                            <textarea name="answer" class="control" rows="5">{{answer}}</textarea>
+                            <button type="submit" class="btn btn-primary btn-block btn-sm">Listo</button>
+                            <a class="btn btn-danger btn-block btn-sm m-2" href="">Cancelar</a>
+                        </form>
+                    </div>
                     <div class="card-body" style="display: none; " id="{{_id}}">
                         <p>
                             {{answer}}
                         </p>
-                        <svg onclick="editClick(this.parentNode);" style="position: absolute; right: 5px; bottom: 5px;" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-fill" viewBox="0 0 16 16">
+                        <svg onclick="editClick(this.parentNode.parentNode);" style="position: absolute; right: 5px; bottom: 5px;" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-fill" viewBox="0 0 16 16">
                             <path d="M12.854.146a.5.5 0 0 0-.707 0L10.5 1.793 14.207 5.5l1.647-1.646a.5.5 0 0 0 0-.708l-3-3zm.646 6.061L9.793 2.5 3.293 9H3.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.207l6.5-6.5zm-7.468 7.468A.5.5 0 0 1 6 13.5V13h-.5a.5.5 0 0 1-.5-.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.5-.5V10h-.5a.499.499 0 0 1-.175-.032l-.179.178a.5.5 0 0 0-.11.168l-2 5a.5.5 0 0 0 .65.65l5-2a.5.5 0 0 0 .168-.11l.178-.178z"/>
                         </svg>
                     </div>

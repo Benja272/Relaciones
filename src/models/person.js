@@ -6,11 +6,11 @@ const PersonSchema = new Schema({
         type: String,
         required: true
     },
-    email:{type: String, required:true},
+    email:{type: String, required:true , unique:true},
     password:{type: String, required:true},
-    asks: {
-        id: { type: Schema.ObjectId, ref: 'ask' }
-    },
+    situations: [{
+        _id: { type: Schema.ObjectId, ref: 'Situation' }
+    }]
 }, {
     timestamps: true //fecha de actualizacion y creacion automatica
 })

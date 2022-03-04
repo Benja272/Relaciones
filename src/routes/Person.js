@@ -1,6 +1,7 @@
 const { Router } = require('express');
 const Situation = require("../models/situation")
 const Asks = require("../models/asks")
+const User = require("../models/person")
 const {helpers} = require("../services/auth")
 
 const router = Router();
@@ -12,8 +13,15 @@ const createNewSituation = (req,res) => {
 }
 
 const reciveNewSituation = async (req,res) => {
-    const {situation} = req.body;
-    const newSit = new Situation({situation: situation, user: req.user.id});
+    const {title, situation} = req.body;
+    const newSit = new Situation({title: title, situation: situation});
+    const _id = newSit._id 
+    const user = await User.findByIdAndUpdate(req.user.id, {
+        $addToSet:{
+            "situations": {_id}
+        }
+    })
+    newSit.user.id = user._id
     try {
         await newSit.save()
     }catch(err){
@@ -25,7 +33,8 @@ const reciveNewSituation = async (req,res) => {
 }
 
 const renderSituations = async (req,res) => {
-    const situations = await Situation.find({user: req.user.id}).lean()
+    const situations = await Situation.find({'user.id': req.user.id}).lean()
+    console.log(situations)
     res.render('situations/allSituations', {situations})
 }
 
@@ -48,30 +57,21 @@ const updateSit = async (req, res) => {
 };
 //Ask Controllers
 
-const createNewAsk = (req,res) => {
-    res.render('asks/newAsk')
-}
-
-const reciveNewAsk = async (req,res) => {
-    const {answer} = req.body;
-    const newAsk = new Asks({ask:"que te gusta?",answer: answer, user: req.user.id});
-    await newAsk.save()
-    req.flash("success_msg", "Respuesta Recibida")
-    console.log(newAsk);
-    res.redirect('/asks')
-}
-
 const editAsk = async (req,res) => {
     const {answer} = req.body
-    await Asks.findByIdAndUpdate(req.params.id, {answer}) 
+    await Asks.findOneAndUpdate(req.params.id, {answer: answer}) 
     req.flash("success_msg", "Respuesta Modificada Correctamente")
-    res.redirect("/asks")
+    res.redirect('back');
 }
 
 const renderAsks = async (req,res) => {
-    const asks = await Asks.find({user: req.user.id}).lean()
-    res.render('asks/allAsks',{asks})  
-    console.log(asks);
+    const asks = await Asks.find({'situation.id': req.params.id}).lean()
+    param = { asks }
+    if(req.user.email == process.env.EMAIL_SU){
+        sitId = req.params.id
+        param = { asks, sitId}
+    }
+    res.render('asks/allAsks', param)  
 }
 
 const deleteAsk = async (req,res) => {
@@ -89,25 +89,24 @@ router.post('/sit/addNewSit', helpers.isAuth, reciveNewSituation)
 router.get('/sit', helpers.isAuth,renderSituations)
 
 //Delete Situation
-router.delete('/sit/delete/:id', helpers.validUserSit, helpers.isAuth,deleteSit)
+router.delete('/sit/delete/:id', helpers.isAuth ,helpers.validUserSit,deleteSit)
 
 //Edit Situation
-router.get('/sit/edit/:id', helpers.validUserSit, helpers.isAuth, renderEditSitForm)
-router.put('/sit/updateSit/:id', helpers.validUserSit, helpers.isAuth, updateSit)
+router.get('/sit/edit/:id', helpers.isAuth ,helpers.validUserSit, renderEditSitForm)
+router.put('/sit/updateSit/:id', helpers.isAuth ,helpers.validUserSit, updateSit)
 
 //asks
 //New asks
-router.get('/asks/add', helpers.isAuth, createNewAsk)//mostrar formulario para agregar pregunta)
-router.post('/asks/addNewAsk', helpers.isAuth, reciveNewAsk)
-//all sit
-router.get("/asks", helpers.isAuth,renderAsks)
+
+//Situation asks
+router.get("/sit/:id", helpers.isAuth, helpers.validUserAsk,renderAsks)
 
 //edit
-router.get('/asks/edit/:id', helpers.validUserAsk, helpers.isAuth,renderSituations)
-router.put('/asks/updateAsk/:id', helpers.validUserAsk, helpers.isAuth,editAsk)
+router.get('/asks/edit/:id', helpers.isAuth, helpers.validUserAsk,renderSituations)
+router.put('/asks/updateAsk/:id', helpers.isAuth, helpers.validEditAsk,editAsk)
 
 //delete
-router.delete('/asks/delete/:id', helpers.validUserAsk, helpers.isAuth,deleteAsk)
+router.delete('/asks/delete/:id', helpers.isAuth, helpers.validUserAsk,deleteAsk)
 
 
 module.exports = {router, renderAsks};
