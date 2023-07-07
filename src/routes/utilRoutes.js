@@ -35,18 +35,18 @@ const reciveNewAsk = async (req,res) => {
 }
 
 const renderSits = async (req, res) => {
-    const sits = await User.aggregate([
+    const users = await User.aggregate([
         { $lookup:
             {
             from: 'situations',
             localField: '_id',
-            foreignField: 'user',
+            foreignField: 'user.id',
             as: 'userSits'
             }
         }
       ]);
-    console.log(sits)
-    res.render("situations/SUsituations", {sits})
+    console.log(users[0].userSits)
+    res.render("situations/SUsituations", {users})
 }
 
 router.post('/asks/addNewAsk/:id', helpers.isAuth, reciveNewAsk)

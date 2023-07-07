@@ -2,11 +2,13 @@
     <h1 class="">Todas las Situaciones
     </h1>
 </div>
+{{#each users}}
+<h4 class="d-inline card-header text-info mx-auto">{{Name}}</h4>
 <div class="row m-3">
-    {{#each sits}}
+        {{#each userSits}}
         <div class="col-md-3">
             <div class="d-flex bg-primary ">
-                <h4 class="d-inline card-header mx-auto">User: </h4>
+                
                 <h4 class="d-inline card-header mx-auto">{{title}}</h4>
             </div>
             <div class="card d-flex justify-content-between">
@@ -28,5 +30,6 @@
                 </div>
             </div>
         </div>
-    {{/each}}
+        {{/each}}
 </div>
+{{/each}}

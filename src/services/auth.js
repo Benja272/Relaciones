@@ -1,3 +1,4 @@
+const mongoose = require("mongoose")
 const Situation = require("../models/situation")
 const Ask = require("../models/asks")
 
@@ -11,10 +12,11 @@ helpers.isAuth = (req, res, next) => {
 }
 
 helpers.isAuthSU = (req, res, next) => {
-    if (req.isAuthenticated() && req.user.email == process.env.EMAIL_SU){
-        return next()
+    if (req.isAuthenticated()){
+        if(req.user.email == process.env.EMAIL_SU){
+            return next()
+        }
     }
-    console.log(req.user.email, process.env.USER)
     req.flash("error_msg", "Not Authorized.");
     res.redirect('/signIn')
 }
@@ -47,12 +49,25 @@ helpers.validUserAsk = async (req, res, next) => {
 }
 
 helpers.validEditAsk = async (req, res, next) => {
-    const ask = await Ask.findById(req.params.id).lean()
-    if(ask.user != req.user.id){
+    const valid = await findUserAsk(req.user.id,req.params.id)
+    console.log(valid)
+    if(!valid){
         req.flash("error_msg", "Is not your Asks");
         return res.redirect("/sit");
     }
     return next()
+}
+
+const findUserAsk = async (userId, askId) => {
+    var res = false
+    const query = await Situation.find({"user.id": mongoose.Types.ObjectId(userId), "asks": {
+        $elemMatch: {_id:{$eq:mongoose.Types.ObjectId(askId)}}
+    }})
+    console.log(query)
+    if(query != []){
+        res = true
+    }
+    return res
 }
 
 
